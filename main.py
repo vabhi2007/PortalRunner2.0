@@ -1,6 +1,6 @@
 import pygame
 import time
-#test
+#test2
 try:
     pygame.init()
 except False:
