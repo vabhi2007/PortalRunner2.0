@@ -139,21 +139,24 @@ def checkKey():
 
             if len(RedPortal) > 0 and len(BluePortal) > 0:
                 if CharacterDirection == 'right':
-                    if CharacterX + 29 >= RedPortal[0][1][0] and CharacterX + 29 <= RedPortal[0][1][0] + 26:
-                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][0]:
+                    if CharacterX + 29 >= RedPortal[0][1][0] and CharacterX + 29 <= RedPortal[0][1][0] + 28:
+                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][1]:
                             CharacterX = BluePortal[0][1][0]
                             CharacterY = BluePortal[0][1][1]
-                    if CharacterX + 29 >= BluePortal[0][1][0] and CharacterX + 29 <= BluePortal[0][1][0] + 26:
-                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][0]:
+                    elif CharacterX + 29 >= BluePortal[0][1][0] and CharacterX + 29 <= BluePortal[0][1][0] + 28:
+                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][1]:
                             CharacterX = RedPortal[0][1][0]
                             CharacterY = RedPortal[0][1][1]
                 elif CharacterDirection == 'left':
-                    if CharacterX >= RedPortal[0][1][0] and CharacterX<= RedPortal[0][1][0] + 26:
-                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][0]:
+                    if CharacterX >= RedPortal[0][1][0] and CharacterX<= RedPortal[0][1][0] + 28:
+                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][1]:
+                            print("hi")
+                            print(BluePortal[0][1][0])
+                            print(RedPortal[0][1][0])
                             CharacterX = BluePortal[0][1][0]
                             CharacterY = BluePortal[0][1][1]
-                    if CharacterX>= BluePortal[0][1][0] and CharacterX<= BluePortal[0][1][0] + 26:
-                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][0]:
+                    elif CharacterX>= BluePortal[0][1][0] and CharacterX<= BluePortal[0][1][0] + 28:
+                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][1]:
                             CharacterX = RedPortal[0][1][0]
                             CharacterY = RedPortal[0][1][1]
 
