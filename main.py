@@ -29,8 +29,12 @@ DisplayX = 700
 DisplayY = 500
 Display = pygame.display.set_mode((DisplayX, DisplayY))
 Display.fill(white)
-
-
+pygame.mouse.set_cursor(pygame.cursors.arrow)
+pygame.mouse.set_visible(False)
+blueCursor = pygame.image.load("Sprites/Blue Cursor.png")
+redCursor = pygame.image.load("Sprites/RedCursor.png")
+defaultCursor = pygame.image.load("Sprites/DefaultCursor.png")
+variation = 'default'
 
 class Platform:
     width = 150
@@ -68,7 +72,7 @@ def Level1():
         PossibleMovementCoords.append((centerX + 300, centerY + 50))
     seconds+=0.01
 def checkKey ():
-    global centerX,centerY,CharacterDirection,PossibleMovementCoords, CharacterX, CharacterY
+    global centerX,centerY,CharacterDirection,PossibleMovementCoords, CharacterX, CharacterY, variation
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -77,11 +81,7 @@ def checkKey ():
             for Coord in PossibleMovementCoords:
                 CoordX = Coord[0]
                 CoordY = Coord[1]
-                print(CoordX, CoordY)
-                print(CharacterY + 85)
-                print(CoordY-85)
                 if CharacterY + 85 >= CoordY and CoordY - 45 >= CharacterY:
-                    print(Coord)
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
                         if event.key == pygame.K_a:
                             centerX+=10
@@ -100,6 +100,20 @@ def checkKey ():
                             centerX-=10
                             CharacterDirection = 'right'
                         break
+            if event.key == pygame.K_2:
+                variation = 'red'
+            if event.key == pygame.K_3:
+                variation = 'blue'
+            if event.key == pygame.K_1:
+                variation = 'default'
+def makeCursor():
+    global variation
+    if variation == 'red':
+        Display.blit(redCursor, pygame.mouse.get_pos())
+    elif variation == 'blue':
+        Display.blit(blueCursor, pygame.mouse.get_pos())
+    else:
+        Display.blit(defaultCursor, pygame.mouse.get_pos())
 
 font = pygame.font.Font('freesansbold.ttf',32)
 while True:
@@ -107,6 +121,8 @@ while True:
     #seconds+=0.01
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
+
+    makeCursor()
 
     LoadLevel(1)
     makeCharacter(CharacterDirection)
