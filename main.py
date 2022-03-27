@@ -25,6 +25,9 @@ redPortal = pygame.image.load("Sprites/RedPortal.png")
 RightCharacter = pygame.image.load("Sprites/Right.png")
 LeftCharacter = pygame.image.load("Sprites/Left.png")
 
+redPortalCoord = 0
+bluePortalCoord = 0
+
 DisplayX = 700
 DisplayY = 500
 Display = pygame.display.set_mode((DisplayX, DisplayY))
@@ -35,6 +38,8 @@ blueCursor = pygame.image.load("Sprites/Blue Cursor.png")
 redCursor = pygame.image.load("Sprites/RedCursor.png")
 defaultCursor = pygame.image.load("Sprites/DefaultCursor.png")
 variation = 'default'
+RedPortal = []
+BluePortal = []
 
 class Platform:
     width = 150
@@ -106,6 +111,25 @@ def checkKey ():
                 variation = 'blue'
             if event.key == pygame.K_1:
                 variation = 'default'
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            addPortal()
+
+def addPortal():
+    global variation, RedPortal, BluePortal
+    if variation == 'red':
+        RedPortal.clear()
+        RedPortal.append((redPortal, pygame.mouse.get_pos()))
+    elif variation == 'blue':
+        BluePortal.clear()
+        BluePortal.append((bluePortal, pygame.mouse.get_pos()))
+
+def makePortal():
+    global RedPortal, BluePortal
+    for item in RedPortal:
+        Display.blit(item[0],item[1])
+    for item in BluePortal:
+        Display.blit(item[0],item[1])
+
 def makeCursor():
     global variation
     if variation == 'red':
@@ -127,7 +151,7 @@ while True:
     LoadLevel(1)
     makeCharacter(CharacterDirection)
     checkKey()
-
+    makePortal()
 
     pygame.display.update()
     Display.blit(background,(0,0))
