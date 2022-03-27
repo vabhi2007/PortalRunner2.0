@@ -55,13 +55,14 @@ PossibleMovementCoords = []
 centerX = 350
 centerY = 250
 def Level1():
-    global centerX,centerY, PossibleMovementCoords
+    global centerX,centerY, PossibleMovementCoords, seconds
     PossibleMovementCoords.clear()
     MakePlatform(centerX-275, centerY-150)
     PossibleMovementCoords.append((centerX-275, centerY-150))
-    MakePlatform(centerX+300,centerY+50)
-    PossibleMovementCoords.append((centerX + 300, centerY + 50))
-
+    if seconds<=5:
+        MakePlatform(centerX+300,centerY+50)
+        PossibleMovementCoords.append((centerX + 300, centerY + 50))
+    seconds+=0.01
 def checkKey ():
     global centerX,centerY,CharacterDirection,PossibleMovementCoords, CharacterX, CharacterY
     for event in pygame.event.get():
@@ -99,13 +100,13 @@ def checkKey ():
 font = pygame.font.Font('freesansbold.ttf',32)
 while True:
     clock.tick(100)
-    seconds+=0.01
+    #seconds+=0.01
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
 
     LoadLevel(1)
-    checkKey()
     makeCharacter(CharacterDirection)
+    checkKey()
 
 
     pygame.display.update()
