@@ -143,6 +143,19 @@ def checkKey():
                         if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][0]:
                             CharacterX = BluePortal[0][1][0]
                             CharacterY = BluePortal[0][1][1]
+                    if CharacterX + 29 >= BluePortal[0][1][0] and CharacterX + 29 <= BluePortal[0][1][0] + 26:
+                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][0]:
+                            CharacterX = RedPortal[0][1][0]
+                            CharacterY = RedPortal[0][1][1]
+                elif CharacterDirection == 'left':
+                    if CharacterX >= RedPortal[0][1][0] and CharacterX<= RedPortal[0][1][0] + 26:
+                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][0]:
+                            CharacterX = BluePortal[0][1][0]
+                            CharacterY = BluePortal[0][1][1]
+                    if CharacterX>= BluePortal[0][1][0] and CharacterX<= BluePortal[0][1][0] + 26:
+                        if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][0]:
+                            CharacterX = RedPortal[0][1][0]
+                            CharacterY = RedPortal[0][1][1]
 
             if event.key == pygame.K_2:
                 variation = 'red'
