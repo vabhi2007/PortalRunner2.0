@@ -18,6 +18,10 @@ red = (255, 0, 0)
 green = (0, 255, 0)
 blue = (0, 0, 255)
 
+platform = pygame.image.load("Sprites/Platform.png")
+background = pygame.image.load("Sprites/Background.png")
+bluePortal = pygame.image.load("Sprites/BluePortal.png")
+redPortal = pygame.image.load("Sprites/RedPortal.png")
 RightCharacter = pygame.image.load("Sprites/Right.png")
 LeftCharacter = pygame.image.load("Sprites/Left.png")
 
@@ -29,12 +33,12 @@ Display.fill(white)
 
 
 class Platform:
-    width = 175
+    width = 150
     height = 25
     color = black
 
 def MakePlatform (x,y):
-    pygame.draw.rect(Display,Platform.color,(x,y,Platform.width, Platform.height))
+    Display.blit(platform,(x,y))
 
 def LoadLevel(level):
     if level == 1:
@@ -110,7 +114,7 @@ while True:
 
 
     pygame.display.update()
-    pygame.draw.rect(Display, white, (0, 0, 700, 500))
+    Display.blit(background,(0,0))
 
 # GameObjects = []
 # Object = (Display,(0,0,255),(50,50,100,100),2)
