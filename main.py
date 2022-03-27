@@ -29,7 +29,7 @@ Display.fill(white)
 
 
 class Platform:
-    width = 125
+    width = 175
     height = 25
     color = black
 
@@ -62,32 +62,39 @@ def Level1():
     MakePlatform(centerX+300,centerY+50)
     PossibleMovementCoords.append((centerX + 300, centerY + 50))
 
-def canMove ():
-    global PossibleMovementCoords, CharacterX,CharacterY
-    print(PossibleMovementCoords)
-    for coord in PossibleMovementCoords:
-        print(coord)
-        X = coord[0]
-        Y = coord[1]
-        if CharacterX > X-9 and CharacterX < X + 125 + 9:
-            print("Hi")
-            return True
-
 def checkKey ():
-    global centerX,centerY,CharacterDirection,PossibleMovementCoords
+    global centerX,centerY,CharacterDirection,PossibleMovementCoords, CharacterX, CharacterY
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
         elif event.type == pygame.KEYDOWN:
-            if canMove() == True:
-                if event.key == pygame.K_a:
-
-                    centerX+=10
-                    CharacterDirection = 'left'
-                elif event.key == pygame.K_d:
-                    centerX-=10
-                    CharacterDirection = 'right'
+            for Coord in PossibleMovementCoords:
+                CoordX = Coord[0]
+                CoordY = Coord[1]
+                print(CoordX, CoordY)
+                print(CharacterY + 85)
+                print(CoordY-85)
+                if CharacterY + 85 >= CoordY and CoordY - 45 >= CharacterY:
+                    print(Coord)
+                    if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
+                        if event.key == pygame.K_a:
+                            centerX+=10
+                            CharacterDirection = 'left'
+                        elif event.key == pygame.K_d:
+                            centerX-=10
+                            CharacterDirection = 'right'
+                        break
+                    elif CharacterX - 20 >= CoordX:
+                        if event.key == pygame.K_a:
+                            centerX+=10
+                            CharacterDirection = 'left'
+                        break
+                    elif CharacterX + 20 <= CoordX + Platform.width:
+                        if event.key == pygame.K_d:
+                            centerX-=10
+                            CharacterDirection = 'right'
+                        break
 
 font = pygame.font.Font('freesansbold.ttf',32)
 while True:
