@@ -12,7 +12,7 @@ except False:
 else:
     print("Success")
 # Basic Colors
-black = (0,0,0)
+black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
 green = (0, 255, 0)
@@ -41,13 +41,16 @@ variation = 'default'
 RedPortal = []
 BluePortal = []
 
+
 class Platform:
     width = 150
     height = 25
     color = black
 
-def MakePlatform (x,y):
-    Display.blit(platform,(x,y))
+
+def MakePlatform(x, y):
+    Display.blit(platform, (x, y))
+
 
 def LoadLevel(level):
     if level == 1:
@@ -58,26 +61,37 @@ def LoadLevel(level):
 CharacterX = 75
 CharacterY = 50
 CharacterDirection = 'right'
-def makeCharacter (direction):
+
+
+def makeCharacter(direction):
     if direction == 'right':
         Display.blit(RightCharacter, (CharacterX, CharacterY))
     else:
         Display.blit(LeftCharacter, (CharacterX, CharacterY))
+
+
 PossibleMovementCoords = []
 
 centerX = 350
 centerY = 250
+
+
 def Level1():
-    global centerX,centerY, PossibleMovementCoords, seconds
+    global centerX, centerY, PossibleMovementCoords, seconds
     PossibleMovementCoords.clear()
-    MakePlatform(centerX-275, centerY-150)
-    PossibleMovementCoords.append((centerX-275, centerY-150))
-    if seconds<=5:
-        MakePlatform(centerX+300,centerY+50)
-        PossibleMovementCoords.append((centerX + 300, centerY + 50))
-    seconds+=0.01
-def checkKey ():
-    global centerX,centerY,CharacterDirection,PossibleMovementCoords, CharacterX, CharacterY, variation
+    MakePlatform(centerX - 275, centerY - 150)
+    PossibleMovementCoords.append((centerX - 275, centerY - 150))
+    MakePlatform(centerX + 300, centerY + 50)
+    PossibleMovementCoords.append((centerX + 300, centerY + 50))
+                                   # Example of disappearing platform
+    # if seconds<=5:
+    #     MakePlatform(centerX+300,centerY+50)
+    #     PossibleMovementCoords.append((centerX + 300, centerY + 50))
+    seconds += 0.01
+
+
+def checkKey():
+    global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -89,22 +103,47 @@ def checkKey ():
                 if CharacterY + 85 >= CoordY and CoordY - 45 >= CharacterY:
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
                         if event.key == pygame.K_a:
-                            centerX+=10
+                            if len(RedPortal) > 0:
+                                RedPortal[0][1][0] += 10
+                            if len(BluePortal) > 0:
+                                BluePortal[0][1][0] += 10
+                            centerX += 10
                             CharacterDirection = 'left'
                         elif event.key == pygame.K_d:
-                            centerX-=10
+                            if len(RedPortal) > 0:
+                                RedPortal[0][1][0] -= 10
+                            if len(BluePortal) > 0:
+                                BluePortal[0][1][0] -= 10
+                            centerX -= 10
                             CharacterDirection = 'right'
+
                         break
                     elif CharacterX - 20 >= CoordX:
                         if event.key == pygame.K_a:
-                            centerX+=10
+                            if len(RedPortal) > 0:
+                                RedPortal[0][1][0] += 10
+                            if len(BluePortal) > 0:
+                                BluePortal[0][1][0] += 10
+                            centerX += 10
                             CharacterDirection = 'left'
                         break
                     elif CharacterX + 20 <= CoordX + Platform.width:
                         if event.key == pygame.K_d:
-                            centerX-=10
+                            if len(RedPortal) > 0:
+                                RedPortal[0][1][0] -= 10
+                            if len(BluePortal) > 0:
+                                BluePortal[0][1][0] -= 10
+                            centerX -= 10
                             CharacterDirection = 'right'
                         break
+
+            if len(RedPortal) > 0 and len(BluePortal) > 0:
+                if CharacterDirection == 'right':
+                    if CharacterX + 29 >= RedPortal[0][1][0] and CharacterX + 29 <= RedPortal[0][1][0] + 26:
+                        if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][0]:
+                            CharacterX = BluePortal[0][1][0]
+                            CharacterY = BluePortal[0][1][1]
+
             if event.key == pygame.K_2:
                 variation = 'red'
             if event.key == pygame.K_3:
@@ -114,21 +153,24 @@ def checkKey ():
         elif event.type == pygame.MOUSEBUTTONDOWN:
             addPortal()
 
+
 def addPortal():
     global variation, RedPortal, BluePortal
     if variation == 'red':
         RedPortal.clear()
-        RedPortal.append((redPortal, pygame.mouse.get_pos()))
+        RedPortal.append((redPortal, list(pygame.mouse.get_pos())))
     elif variation == 'blue':
         BluePortal.clear()
-        BluePortal.append((bluePortal, pygame.mouse.get_pos()))
+        BluePortal.append((bluePortal, list(pygame.mouse.get_pos())))
+
 
 def makePortal():
     global RedPortal, BluePortal
     for item in RedPortal:
-        Display.blit(item[0],item[1])
+        Display.blit(item[0], item[1])
     for item in BluePortal:
-        Display.blit(item[0],item[1])
+        Display.blit(item[0], item[1])
+
 
 def makeCursor():
     global variation
@@ -139,10 +181,11 @@ def makeCursor():
     else:
         Display.blit(defaultCursor, pygame.mouse.get_pos())
 
-font = pygame.font.Font('freesansbold.ttf',32)
+
+font = pygame.font.Font('freesansbold.ttf', 32)
 while True:
     clock.tick(100)
-    #seconds+=0.01
+    # seconds+=0.01
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
 
@@ -150,11 +193,11 @@ while True:
 
     LoadLevel(1)
     makeCharacter(CharacterDirection)
-    checkKey()
     makePortal()
+    checkKey()
 
     pygame.display.update()
-    Display.blit(background,(0,0))
+    Display.blit(background, (0, 0))
 
 # GameObjects = []
 # Object = (Display,(0,0,255),(50,50,100,100),2)
