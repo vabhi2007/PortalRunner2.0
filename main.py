@@ -53,7 +53,7 @@ BluePortal = []
 
 
 class Platform:
-    width = 300
+    width = 150
     height = 25
     color = black
 
