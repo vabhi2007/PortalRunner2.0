@@ -1,7 +1,7 @@
 import math
-
-import pygame
 import time
+import pygame
+
 
 clock = pygame.time.Clock()
 seconds = 0
@@ -27,6 +27,10 @@ StartingScreen = pygame.image.load("Sprites/Starting Screen.png")
 Controls = pygame.image.load("Sprites/Controls.png")
 StarterImages = [StartingScreen,Controls]
 StartIndex = 0
+EscapeIndex = 0
+totalMove = 0
+
+Win = False
 
 platform = pygame.image.load("Sprites/Platform.png")
 background = pygame.image.load("Sprites/Background.png")
@@ -85,6 +89,26 @@ PossibleMovementCoords = []
 centerX = 350
 centerY = 250
 
+def teleport (Portal, PlusOrMinus):
+    global Adjusted, CharacterX, CharacterY
+    if PlusOrMinus == '+':
+        if Portal == 'Red':
+            Adjusted = 0
+            CharacterX = RedPortal[0][1][0] + 20
+            CharacterY = RedPortal[0][1][1]
+        else:
+            Adjusted = 0
+            CharacterX = BluePortal[0][1][0] + 20
+            CharacterY = BluePortal[0][1][1]
+    else:
+        if Portal == 'Red':
+            Adjusted = 0
+            CharacterX = RedPortal[0][1][0] - 20
+            CharacterY = RedPortal[0][1][1]
+        else:
+            Adjusted = 0
+            CharacterX = BluePortal[0][1][0] - 20
+            CharacterY = BluePortal[0][1][1]
 
 def Level1():
     global centerX, centerY, PossibleMovementCoords, seconds
@@ -108,10 +132,15 @@ def Level1():
     #     MakePlatform(centerX+300,centerY+50)
     #     PossibleMovementCoords.append((centerX + 300, centerY + 50))
     seconds += 0.01
-
+def dead():
+    Death = font.render("You died", True, black)
+    Display.blit(Death, (300, 250))
+    pygame.display.update()
+    time.sleep(3)
+    quit()
 Adjusted = 0
 def checkKey():
-    global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex
+    global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex, EscapeIndex, totalMove
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -120,8 +149,15 @@ def checkKey():
             if StartIndex < 2:
                 if event.key == pygame.K_SPACE:
                     StartIndex += 1
-            if Adjusted < 10 and Adjusted > -10:
+            if event.key == pygame.K_ESCAPE:
+                if StartIndex == 1:
+                    StartIndex = 5
+                if EscapeIndex % 2 == 0:
+                    StartIndex = 1
+                EscapeIndex+=1
+            if Adjusted > -10:
                 if event.key == pygame.K_LEFT:
+                    totalMove -= 1
                     Adjusted-=1
                     centerX += 40
                     CharacterX += 40
@@ -129,7 +165,9 @@ def checkKey():
                         RedPortal[0][1][0] += 40
                     if len(BluePortal) > 0:
                         BluePortal[0][1][0] += 40
+            if Adjusted < 10:
                 if event.key == pygame.K_RIGHT:
+                    totalMove += 1
                     Adjusted+=1
                     centerX -= 40
                     CharacterX -= 40
@@ -137,11 +175,14 @@ def checkKey():
                         RedPortal[0][1][0] -= 40
                     if len(BluePortal) > 0:
                         BluePortal[0][1][0] -= 40
+
             for Coord in PossibleMovementCoords:
                 CoordX = Coord[0]
                 CoordY = Coord[1]
                 if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
+                        print(CoordX, CoordX + Platform.width)
+                        print(CharacterX - 10, CharacterX + 30)
                         if event.key == pygame.K_a:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
@@ -151,6 +192,7 @@ def checkKey():
                             CharacterDirection = 'left'
                             break
                         elif event.key == pygame.K_d:
+
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] -= 10
                             if len(BluePortal) > 0:
@@ -170,6 +212,7 @@ def checkKey():
                             break
                     elif CharacterX + 20 <= CoordX + Platform.width:
                         if event.key == pygame.K_d:
+
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] -= 10
                             if len(BluePortal) > 0:
@@ -177,30 +220,33 @@ def checkKey():
                             centerX -= 10
                             CharacterDirection = 'right'
                             break
-
             if len(RedPortal) > 0 and len(BluePortal) > 0:
                 if CharacterDirection == 'right':
                     if CharacterX + 29 >= RedPortal[0][1][0] and CharacterX + 29 <= RedPortal[0][1][0] + 28:
                         if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][1]:
-                            Adjusted = 0
-                            CharacterX = BluePortal[0][1][0]+20
-                            CharacterY = BluePortal[0][1][1]
+                            teleport('Blue', '+')
+                            # Adjusted = 0
+                            # CharacterX = BluePortal[0][1][0]+20
+                            # CharacterY = BluePortal[0][1][1]
                     elif CharacterX + 29 >= BluePortal[0][1][0] and CharacterX + 29 <= BluePortal[0][1][0] + 28:
                         if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][1]:
-                            Adjusted = 0
-                            CharacterX = RedPortal[0][1][0]+20
-                            CharacterY = RedPortal[0][1][1]
+                            teleport('Red', '+')
+                            # Adjusted = 0
+                            # CharacterX = RedPortal[0][1][0]+20
+                            # CharacterY = RedPortal[0][1][1]
                 elif CharacterDirection == 'left':
                     if CharacterX >= RedPortal[0][1][0] and CharacterX<= RedPortal[0][1][0] + 28:
                         if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][1]:
-                            Adjusted = 0
-                            CharacterX = BluePortal[0][1][0]-20
-                            CharacterY = BluePortal[0][1][1]
+                            teleport('Blue', '-')
+                            # Adjusted = 0
+                            # CharacterX = BluePortal[0][1][0]-20
+                            # CharacterY = BluePortal[0][1][1]
                     elif CharacterX>= BluePortal[0][1][0] and CharacterX<= BluePortal[0][1][0] + 28:
                         if CharacterY <= BluePortal[0][1][1] + 50 and CharacterY + 50 >= BluePortal[0][1][1]:
-                            Adjusted = 0
-                            CharacterX = RedPortal[0][1][0]-20
-                            CharacterY = RedPortal[0][1][1]
+                            teleport('Red', '-')
+                            # Adjusted = 0
+                            # CharacterX = RedPortal[0][1][0]-20
+                            # CharacterY = RedPortal[0][1][1]
 
             if event.key == pygame.K_2:
                 variation = 'red'
@@ -209,8 +255,9 @@ def checkKey():
             if event.key == pygame.K_1:
                 variation = 'default'
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            if pygame.mouse.get_pos()[0] > 250 and pygame.mouse.get_pos()[0] < 350 and pygame.mouse.get_pos()[1] > 400:
+                dead()
             addPortal()
-
 
 def addPortal():
     global variation, RedPortal, BluePortal
@@ -241,7 +288,7 @@ def makeCursor():
 
 
 font = pygame.font.Font('freesansbold.ttf', 32)
-while True:
+while Win == False:
     clock.tick(100)
     # seconds+=0.01
     text = font.render(str(math.floor(seconds)), True, black)
@@ -253,15 +300,26 @@ while True:
     if StartIndex < 2:
         Display.blit(StarterImages[StartIndex],(0,0))
     else:
+        checkDeath = font.render("Stuck?", True, black)
+        Display.blit(checkDeath, (300, 460))
         LoadLevel(1)
         makeCharacter(CharacterDirection)
         makePortal()
 
 
     pygame.display.update()
+
+
+    pygame.display.update()
     if StartIndex > 1:
         Display.blit(background, (0, 0))
+    if CharacterX + 40*totalMove >= 2000:
+        break
 
+CurrentTime = font.render("Seconds: " + str(seconds.__floor__()), True, black)
+Display.blit(CurrentTime, (300, 250))
+pygame.display.update()
+time.sleep(5)
 # GameObjects = []
 # Object = (Display,(0,0,255),(50,50,100,100),2)
 # GameObjects.append(Object)
