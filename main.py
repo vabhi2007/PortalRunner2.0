@@ -251,7 +251,7 @@ while True:
     checkKey()
 
     if StartIndex < 2:
-        Display.blit(StarterImages[StartIndexl],(0,0))
+        Display.blit(StarterImages[StartIndex],(0,0))
     else:
         LoadLevel(1)
         makeCharacter(CharacterDirection)
