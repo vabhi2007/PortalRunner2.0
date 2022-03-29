@@ -299,7 +299,7 @@ while Win == False:
     if StartIndex < 2:
         Display.blit(StarterImages[StartIndex],(0,0))
     else:
-        checkDeath = font.render("Stuck?", True, black)
+        checkDeath = font.render("Are you Stuck?", True, black)
         Display.blit(checkDeath, (300, 460))
         LoadLevel(1)
         makeCharacter(CharacterDirection)
