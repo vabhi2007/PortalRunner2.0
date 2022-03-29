@@ -156,7 +156,7 @@ def checkKey():
                     StartIndex = 1
                 EscapeIndex+=1
             if Adjusted > -10:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_UP:
                     totalMove -= 1
                     Adjusted-=1
                     centerX += 40
@@ -166,7 +166,7 @@ def checkKey():
                     if len(BluePortal) > 0:
                         BluePortal[0][1][0] += 40
             if Adjusted < 10:
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_DOWN:
                     totalMove += 1
                     Adjusted+=1
                     centerX -= 40
@@ -181,9 +181,7 @@ def checkKey():
                 CoordY = Coord[1]
                 if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
-                        print(CoordX, CoordX + Platform.width)
-                        print(CharacterX - 10, CharacterX + 30)
-                        if event.key == pygame.K_a:
+                        if event.key == pygame.K_LEFT:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
                             if len(BluePortal) > 0:
@@ -191,7 +189,7 @@ def checkKey():
                             centerX += 10
                             CharacterDirection = 'left'
                             break
-                        elif event.key == pygame.K_d:
+                        elif event.key == pygame.K_RIGHT:
 
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] -= 10
@@ -202,7 +200,7 @@ def checkKey():
                             break
 
                     elif CharacterX - 20 >= CoordX:
-                        if event.key == pygame.K_a:
+                        if event.key == pygame.K_LEFT:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
                             if len(BluePortal) > 0:
@@ -210,9 +208,10 @@ def checkKey():
                             centerX += 10
                             CharacterDirection = 'left'
                             break
-                    elif CharacterX + 20 <= CoordX + Platform.width:
-                        if event.key == pygame.K_d:
-
+                    elif CharacterX + 20 <= CoordX + Platform.width and CharacterX >= CoordX:
+                        if event.key == pygame.K_RIGHT:
+                            print(CoordX, CoordX + Platform.width)
+                            print(CharacterX - 10, CharacterX + 30)
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] -= 10
                             if len(BluePortal) > 0:
