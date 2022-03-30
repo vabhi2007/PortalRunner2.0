@@ -4,12 +4,8 @@ import pygame
 
 clock = pygame.time.Clock()
 seconds = 0
-try:
-    pygame.init()
-except False:
-    print("Fail")
-else:
-    print("Success")
+
+pygame.init()
 
 pygame.display.set_caption("Portal Runner")
 Logo = pygame.image.load("Sprites/Logo.png")
@@ -228,7 +224,7 @@ def checkKey():
                             break
                     # Following two elif statements are exceptions for movement when player is at the edge of a platform
                     elif CharacterX - 10 >= CoordX and CharacterX  <= CoordX + Platform.width+15:
-                        print(CharacterX, CoordX)
+
                         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
@@ -357,7 +353,6 @@ while Win == False:
         makePortal()
 
     pygame.display.update()
-    print(TotalDistance)
     pygame.display.update()
     if StartIndex > 1:
         Display.blit(background, (0, 0))
