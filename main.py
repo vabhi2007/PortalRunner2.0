@@ -258,15 +258,32 @@ def checkKey():
                 dead()
             addPortal()
 
+# def addPortal():
+#     global variation, RedPortal, BluePortal
+#     if variation == 'red':
+#         RedPortal.clear()
+#         RedPortal.append((redPortal, list(pygame.mouse.get_pos())))
+#     elif variation == 'blue':
+#         BluePortal.clear()
+#         BluePortal.append((bluePortal, list(pygame.mouse.get_pos())))
 def addPortal():
-    global variation, RedPortal, BluePortal
+    global variation, RedPortal, BluePortal, PossibleMovementCoords
     if variation == 'red':
         RedPortal.clear()
-        RedPortal.append((redPortal, list(pygame.mouse.get_pos())))
+        for coord in PossibleMovementCoords:
+            PlatformX = coord[0]
+            PlatformY = coord[1]
+            MouseX = pygame.mouse.get_pos()[0]
+            if MouseX >= PlatformX and MouseX <= PlatformX + Platform.width:
+                RedPortal.append((redPortal, list((MouseX,PlatformY-50))))
     elif variation == 'blue':
         BluePortal.clear()
-        BluePortal.append((bluePortal, list(pygame.mouse.get_pos())))
-
+        for coord in PossibleMovementCoords:
+            PlatformX = coord[0]
+            PlatformY = coord[1]
+            MouseX = pygame.mouse.get_pos()[0]
+            if MouseX >= PlatformX and MouseX <= PlatformX + Platform.width:
+                BluePortal.append((bluePortal, list((MouseX, PlatformY - 50))))
 
 def makePortal():
     global RedPortal, BluePortal
