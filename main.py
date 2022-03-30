@@ -53,7 +53,7 @@ defaultCursor = pygame.image.load("Sprites/DefaultCursor.png")
 variation = 'default'
 RedPortal = []
 BluePortal = []
-
+TotalDistance = 0
 
 class Platform:
     width = 150
@@ -66,6 +66,7 @@ def MakePlatform(x, y):
 
 
 def LoadLevel(level):
+    TotalDistance = 0
     if level == 1:
         Level1()
     pass
@@ -90,8 +91,9 @@ centerY = 250
 
 AdjustDistance = 0
 def teleport(Portal, PlusOrMinus):
-    global Adjusted, CharacterX, CharacterY, AdjustDistance
+    global Adjusted, CharacterX, CharacterY, AdjustDistance, TotalDistance
     OldCharacterX = CharacterX
+    OldCharacterY = CharacterY
     if PlusOrMinus == '+':
         if Portal == 'Red':
             Adjusted = 0
@@ -112,7 +114,9 @@ def teleport(Portal, PlusOrMinus):
             CharacterX = BluePortal[0][1][0] - 20
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
+    NewCharacterY = CharacterY
     AdjustDistance = NewCharacterX-OldCharacterX
+    TotalDistance += AdjustDistance
 def adjust (distance):
     global CharacterX, centerX, RedPortal, BluePortal
     CharacterX += distance
@@ -157,7 +161,7 @@ Adjusted = 0
 
 
 def checkKey():
-    global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex, EscapeIndex, totalMove, AdjustDistance
+    global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex, EscapeIndex, totalMove, AdjustDistance, TotalDistance
     #Getting events when they happen
     for event in pygame.event.get():
         #Quit if player exits
@@ -211,6 +215,7 @@ def checkKey():
                                 BluePortal[0][1][0] += 10
                             centerX += 10
                             CharacterDirection = 'left'
+                            TotalDistance-=10
                             break
                         elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                             if len(RedPortal) > 0:
@@ -219,6 +224,7 @@ def checkKey():
                                 BluePortal[0][1][0] -= 10
                             centerX -= 10
                             CharacterDirection = 'right'
+                            TotalDistance += 10
                             break
                     # Following two elif statements are exceptions for movement when player is at the edge of a platform
                     elif CharacterX - 10 >= CoordX and CharacterX  <= CoordX + Platform.width+15:
@@ -230,6 +236,7 @@ def checkKey():
                                 BluePortal[0][1][0] += 10
                             centerX += 10
                             CharacterDirection = 'left'
+                            TotalDistance -= 10
                             break
                     elif CharacterX + 30 <= CoordX + Platform.width and CharacterX >= CoordX-15:
                         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -238,6 +245,7 @@ def checkKey():
                             if len(BluePortal) > 0:
                                 BluePortal[0][1][0] -= 10
                             centerX -= 10
+                            TotalDistance += 10
                             CharacterDirection = 'right'
                             break
             if len(RedPortal) > 0 and len(BluePortal) > 0:
@@ -349,20 +357,15 @@ while Win == False:
         makePortal()
 
     pygame.display.update()
-
+    print(TotalDistance)
     pygame.display.update()
     if StartIndex > 1:
         Display.blit(background, (0, 0))
-    if CharacterX + 40 * totalMove >= 2000:
+    if TotalDistance >= 2820:
         break
 
-CurrentTime = font.render("Seconds: " + str(seconds.__floor__()), True, black)
+CurrentTime = font.render("Seconds: " + str(math.floor(seconds)), True, black)
 Display.blit(CurrentTime, (300, 250))
 pygame.display.update()
 time.sleep(5)
-# GameObjects = []
-# Object = (Display,(0,0,255),(50,50,100,100),2)
-# GameObjects.append(Object)
-# for Shape in GameObjects:
-#     pygame.draw.rect(Shape[0], Shape[1], Shape[2])
-#     pygame.display.update()
+
