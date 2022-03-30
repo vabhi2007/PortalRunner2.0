@@ -113,7 +113,6 @@ def teleport(Portal, PlusOrMinus):
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
     AdjustDistance = NewCharacterX-OldCharacterX
-    print(AdjustDistance)
 def adjust (distance):
     global CharacterX, centerX, RedPortal, BluePortal
     CharacterX += distance
@@ -176,7 +175,7 @@ def checkKey():
                     StartIndex = 1
                 EscapeIndex += 1
 
-            #Code for adjusting view
+            # Code for adjusting view
             # if Adjusted > -10:
             #     if event.key == pygame.K_UP:
             #         totalMove -= 1
@@ -222,7 +221,8 @@ def checkKey():
                             CharacterDirection = 'right'
                             break
                     # Following two elif statements are exceptions for movement when player is at the edge of a platform
-                    elif CharacterX - 20 >= CoordX:
+                    elif CharacterX - 10 >= CoordX and CharacterX  <= CoordX + Platform.width+15:
+                        print(CharacterX, CoordX)
                         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
@@ -231,7 +231,7 @@ def checkKey():
                             centerX += 10
                             CharacterDirection = 'left'
                             break
-                    elif CharacterX + 20 <= CoordX + Platform.width and CharacterX >= CoordX:
+                    elif CharacterX + 30 <= CoordX + Platform.width and CharacterX >= CoordX-15:
                         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] -= 10
@@ -278,6 +278,8 @@ def checkKey():
             if pygame.mouse.get_pos()[0] > 250 and pygame.mouse.get_pos()[0] < 350 and pygame.mouse.get_pos()[1] > 400:
                 dead()
             addPortal()
+
+        #Code for auto adjust
         adjust(-1*AdjustDistance)
         AdjustDistance = 0
 
