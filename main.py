@@ -11,19 +11,6 @@ pygame.display.set_caption("Portal Runner")
 Logo = pygame.image.load("Sprites/Logo.png")
 pygame.display.set_icon(Logo)
 
-HighScores = open("HighScores", 'r+')
-AllHighScores = []
-for values in HighScores:
-    AllHighScores.append(int(values[0]))
-print(AllHighScores)
-HighScore = 0
-for nums in AllHighScores:
-    print(nums)
-    CurrentHighScore = HighScore
-    NewHighScore = nums
-    if NewHighScore>CurrentHighScore:
-        HighScore = NewHighScore
-print(HighScore)
 # Basic Colors
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -373,8 +360,15 @@ while Win == False:
         break
 
 CurrentTime = font.render("Seconds: " + str(math.floor(seconds)), True, black)
-HighScores.write((str(math.floor(seconds))+"\n"))
 Display.blit(CurrentTime, (300, 250))
+
+
+HighScores = open("Scores", 'r+')
+AllHighScoresTemp = HighScores.readlines()
+AllHighScores = []
+for values in AllHighScoresTemp:
+    AllHighScores.append(values[0])
+print(AllHighScores)
 pygame.display.update()
 time.sleep(5)
-HighScores.close()
+
