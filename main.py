@@ -363,12 +363,6 @@ CurrentTime = font.render("Seconds: " + str(math.floor(seconds)), True, black)
 Display.blit(CurrentTime, (300, 250))
 
 
-HighScores = open("Scores", 'r+')
-AllHighScoresTemp = HighScores.readlines()
-AllHighScores = []
-for values in AllHighScoresTemp:
-    AllHighScores.append(values[0])
-print(AllHighScores)
 pygame.display.update()
 time.sleep(5)
 
