@@ -93,21 +93,21 @@ def teleport(Portal, PlusOrMinus):
     if PlusOrMinus == '+':
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0]
+            CharacterX = RedPortal[0][1][0] + 15
             CharacterY = RedPortal[0][1][1]
 
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]
+            CharacterX = BluePortal[0][1][0]+ 15
             CharacterY = BluePortal[0][1][1]
     else:
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0]
+            CharacterX = RedPortal[0][1][0]- 15
             CharacterY = RedPortal[0][1][1]
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]
+            CharacterX = BluePortal[0][1][0]- 15
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
     NewCharacterY = CharacterY
