@@ -93,21 +93,21 @@ def teleport(Portal, PlusOrMinus):
     if PlusOrMinus == '+':
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0] + 20
+            CharacterX = RedPortal[0][1][0]
             CharacterY = RedPortal[0][1][1]
 
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0] + 20
+            CharacterX = BluePortal[0][1][0]
             CharacterY = BluePortal[0][1][1]
     else:
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0] - 20
+            CharacterX = RedPortal[0][1][0]
             CharacterY = RedPortal[0][1][1]
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0] - 20
+            CharacterX = BluePortal[0][1][0]
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
     NewCharacterY = CharacterY
@@ -279,8 +279,6 @@ def checkKey():
             if event.key == pygame.K_1:
                 variation = 'default'
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pos()[0] > 250 and pygame.mouse.get_pos()[0] < 350 and pygame.mouse.get_pos()[1] > 400:
-                dead()
             addPortal()
 
         #Code for auto adjust
@@ -303,16 +301,16 @@ def addPortal():
             PlatformX = coord[0]
             PlatformY = coord[1]
             MouseX = pygame.mouse.get_pos()[0]
-            if MouseX >= PlatformX and MouseX <= PlatformX + Platform.width:
-                RedPortal.append((redPortal, list((MouseX, PlatformY - 50))))
+            if MouseX >= PlatformX+2 and MouseX <= PlatformX + Platform.width-7:
+                RedPortal.append((redPortal, list((MouseX-7, PlatformY - 50))))
     elif variation == 'blue':
         BluePortal.clear()
         for coord in PossibleMovementCoords:
             PlatformX = coord[0]
             PlatformY = coord[1]
             MouseX = pygame.mouse.get_pos()[0]
-            if MouseX >= PlatformX and MouseX <= PlatformX + Platform.width:
-                BluePortal.append((bluePortal, list((MouseX, PlatformY - 50))))
+            if MouseX >= PlatformX+2 and MouseX <= PlatformX + Platform.width-7:
+                BluePortal.append((bluePortal, list((MouseX-7, PlatformY - 50))))
 
 
 def makePortal():
@@ -346,11 +344,9 @@ while Win == False:
     if StartIndex < 2:
         Display.blit(StarterImages[StartIndex], (0, 0))
     else:
-        checkDeath = font.render("Are you Stuck?", True, black)
-        Display.blit(checkDeath, (300, 460))
         LoadLevel(1)
-        makeCharacter(CharacterDirection)
         makePortal()
+        makeCharacter(CharacterDirection)
 
     pygame.display.update()
     pygame.display.update()
