@@ -93,21 +93,21 @@ def teleport(Portal, PlusOrMinus):
     if PlusOrMinus == '+':
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0] + 15
+            CharacterX = RedPortal[0][1][0]+20
             CharacterY = RedPortal[0][1][1]
 
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]+ 15
+            CharacterX = BluePortal[0][1][0]+20
             CharacterY = BluePortal[0][1][1]
     else:
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0]- 15
+            CharacterX = RedPortal[0][1][0]-20
             CharacterY = RedPortal[0][1][1]
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]- 15
+            CharacterX = BluePortal[0][1][0]-20
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
     NewCharacterY = CharacterY
@@ -155,6 +155,24 @@ def dead():
 
 Adjusted = 0
 
+def checkIfOffPlatform():
+    global PossibleMovementCoords, CharacterX, CharacterY, centerX
+    for coord in PossibleMovementCoords:
+        CoordX = coord[0]
+        CoordY = coord[1]
+        if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
+            if CharacterX >= CoordX - 40 and CharacterX <= CoordX + Platform.width + 40:
+                print(CharacterX,CharacterY)
+                print(CoordX,CoordY)
+                print("Limit:",str(Platform.width+CoordX))
+                print("Min:",str(CoordX))
+                Limit = Platform.width+CoordX
+                Min = CoordX
+                if CharacterX  > Limit:
+                    CharacterX = Limit - 29
+                    adjust(29)
+                elif CharacterX  < Min:
+                    CharacterX = Min
 
 def checkKey():
     global centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex, EscapeIndex, totalMove, AdjustDistance, TotalDistance
@@ -199,12 +217,14 @@ def checkKey():
 
 
             for Coord in PossibleMovementCoords:
+                pressed_keys = pygame.key.get_pressed()
                 CoordX = Coord[0]
                 CoordY = Coord[1]
                 if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
                     # If and elif for moving player if it's possible
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
                         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+
                             if len(RedPortal) > 0:
                                 RedPortal[0][1][0] += 10
                             if len(BluePortal) > 0:
@@ -245,6 +265,7 @@ def checkKey():
                             CharacterDirection = 'right'
                             break
             if len(RedPortal) > 0 and len(BluePortal) > 0:
+
                 if CharacterDirection == 'right':
                     if CharacterX + 29 >= RedPortal[0][1][0] and CharacterX + 29 <= RedPortal[0][1][0] + 28:
                         if CharacterY <= RedPortal[0][1][1] + 50 and CharacterY + 50 >= RedPortal[0][1][1]:
@@ -333,7 +354,7 @@ def makeCursor():
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 while Win == False:
-    clock.tick(100)
+    clock.tick(500)
     # seconds+=0.01
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
@@ -347,6 +368,7 @@ while Win == False:
         LoadLevel(1)
         makePortal()
         makeCharacter(CharacterDirection)
+        checkIfOffPlatform()
 
     pygame.display.update()
     pygame.display.update()
@@ -362,3 +384,4 @@ Display.blit(CurrentTime, (300, 250))
 pygame.display.update()
 time.sleep(5)
 
+#Find how to use text input instead of keydown and keyup
