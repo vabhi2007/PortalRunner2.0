@@ -377,9 +377,28 @@ while Win == False:
     if TotalDistance >= 2820:
         break
 
-CurrentTime = font.render("Seconds: " + str(math.floor(seconds)), True, black)
+Seconds = str(math.floor(seconds))
+CurrentTime = font.render("Seconds: " + Seconds, True, black)
 Display.blit(CurrentTime, (300, 250))
 
+ScoreFile = open("Scores", 'a')
+ScoreFile.write(Seconds + '\n')
+ScoreFile.close()
+ScoreFile = open("Scores", 'r')
+TempCurrentNumbers = ScoreFile.readlines()
+CurrentNumbers = []
+print(TempCurrentNumbers)
+for nums in TempCurrentNumbers:
+    if nums != '\n':
+        CurrentNumbers.append(int(nums))
+
+HighScore = 100000
+for values in CurrentNumbers:
+    if values < HighScore:
+        HighScore = values
+ScoreFile.close()
+CurrentHighScore = font.render("High Score: " + str(HighScore), True, black)
+Display.blit(CurrentHighScore, (300, 300))
 
 pygame.display.update()
 time.sleep(5)
