@@ -403,4 +403,3 @@ Display.blit(CurrentHighScore, (300, 300))
 pygame.display.update()
 time.sleep(5)
 
-#Find how to use text input instead of keydown and keyup
