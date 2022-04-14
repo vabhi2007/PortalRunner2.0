@@ -11,6 +11,8 @@ pygame.init()
 
 pygame.display.set_caption("Portal Runner")
 Logo = pygame.image.load("Sprites/Logo.png")
+RightGround = pygame.image.load("Sprites/Ground Enemy Right.png")
+LeftGround = pygame.image.load("Sprites/Ground Enemy Left.png")
 pygame.display.set_icon(Logo)
 
 # Basic Colors
@@ -29,6 +31,7 @@ totalMove = 0
 
 Win = False
 
+LevelDistances = [0]
 platform = pygame.image.load("Sprites/Platform.png")
 VerticalSpike = pygame.image.load("Sprites/Vertical Spikes.png")
 background = pygame.image.load("Sprites/Background.png")
@@ -55,13 +58,15 @@ BluePortal = []
 TotalDistance = 0
 
 class Platform:
-    width = 150
-    height = 25
+    width = platform.get_width()
+    height = platform.get_height()
     color = black
 class VerticalSpikes:
-    width = 28
-    height = 49
-
+    width = VerticalSpike.get_width()
+    height = VerticalSpike.get_height()
+class GroundEnemy:
+    width = RightGround.get_width()
+    height = RightGround.get_height()
 def MakePlatform(x, y):
     Display.blit(platform, (x, y))
     PossibleMovementCoords.append((x,y))
@@ -130,26 +135,29 @@ def adjust (distance):
     if len(BluePortal)>0:
         BluePortal[0][1][0] += distance
 PossibleDeathCoord = [] #Contains x,y,width of object
-Direction = 'Right'
-MovingSpikeLocation = 75
+GroundDirection = 'Right'
+MovingGroundEnemyLocation = 75
 def makeMovingEnemy (x,y):
-    global Direction, MovingSpikeLocation
-    if Direction =='Right':
-        if MovingSpikeLocation < 120:
-            MovingSpikeLocation+=1
+    global GroundDirection, MovingGroundEnemyLocation
+    if GroundDirection =='Right':
+        if MovingGroundEnemyLocation < 120:
+            MovingGroundEnemyLocation+=1
         else:
-            Direction = 'Left'
-            MovingSpikeLocation-=1
-    elif Direction =='Left':
-        if MovingSpikeLocation > 0:
-            MovingSpikeLocation-=1
+            GroundDirection = 'Left'
+            MovingGroundEnemyLocation-=1
+    elif GroundDirection =='Left':
+        if MovingGroundEnemyLocation > 0:
+            MovingGroundEnemyLocation-=1
         else:
-            Direction = 'Right'
-            MovingSpikeLocation+=1
-    SpikeX = MovingSpikeLocation + x
-    SpikeY = y - VerticalSpikes.height
-    PossibleDeathCoord.append((SpikeX,SpikeY,28))
-    Display.blit(VerticalSpike,(SpikeX,SpikeY))
+            GroundDirection = 'Right'
+            MovingGroundEnemyLocation+=1
+    MovingX = MovingGroundEnemyLocation + x
+    MovingY = y - GroundEnemy.height
+    PossibleDeathCoord.append((MovingX,MovingY,28))
+    if GroundDirection == 'Right':
+        Display.blit(RightGround, (MovingX, MovingY))
+    elif GroundDirection == 'Left':
+        Display.blit(LeftGround,(MovingX,MovingY))
 
 def makeEnemy(x,y, SpikeLocation):
     SpikeX = x + SpikeLocation
@@ -385,9 +393,7 @@ while Win == False:
         if keys[pygame.K_a] or keys[pygame.K_d] or keys[pygame.K_RIGHT] or keys[pygame.K_LEFT]:
             move(type)
         checkDeath()
-        checkIfOffPlatform()
 
-    pygame.display.update()
     pygame.display.update()
     if StartIndex > 1:
         Display.blit(background, (0, 0))
