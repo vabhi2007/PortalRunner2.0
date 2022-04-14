@@ -139,18 +139,19 @@ GroundDirection = 'Right'
 MovingGroundEnemyLocation = 75
 def makeMovingEnemy (x,y):
     global GroundDirection, MovingGroundEnemyLocation
+    EnemyMoveSpeed = 0.5
     if GroundDirection =='Right':
         if MovingGroundEnemyLocation < 120:
-            MovingGroundEnemyLocation+=1
+            MovingGroundEnemyLocation+=EnemyMoveSpeed
         else:
             GroundDirection = 'Left'
-            MovingGroundEnemyLocation-=1
+            MovingGroundEnemyLocation-=EnemyMoveSpeed
     elif GroundDirection =='Left':
         if MovingGroundEnemyLocation > 0:
-            MovingGroundEnemyLocation-=1
+            MovingGroundEnemyLocation-=EnemyMoveSpeed
         else:
             GroundDirection = 'Right'
-            MovingGroundEnemyLocation+=1
+            MovingGroundEnemyLocation+=EnemyMoveSpeed
     MovingX = MovingGroundEnemyLocation + x
     MovingY = y - GroundEnemy.height
     PossibleDeathCoord.append((MovingX,MovingY,28))
@@ -183,10 +184,15 @@ def Level1():
     MakePlatform(centerX + 300, centerY + 50)
     makeMovingEnemy(centerX + 300, centerY + 50)
     MakePlatform(centerX + 800, centerY - 75)
+    makeEnemy(centerX + 800, centerY - 75, 20)
     MakePlatform(centerX + 1050, centerY + 150)
+    makeMovingEnemy(centerX + 1050, centerY + 150)
     MakePlatform(centerX + 1400, centerY - 175)
+    makeEnemy(centerX + 1400, centerY - 175)
     MakePlatform(centerX + 1850, centerY + 50)
+    makeMovingEnemy(centerX + 1850, centerY + 50)
     MakePlatform(centerX + 2450, centerY)
+    makeMovingEnemy(centerX + 2450, centerY)
     # Example of disappearing platform
     # if seconds<=5:
     #     MakePlatform(centerX+300,centerY+50)
@@ -423,6 +429,4 @@ CurrentHighScore = font.render("High Score: " + str(HighScore), True, black)
 Display.blit(CurrentHighScore, (170, 150))
 
 pygame.display.update()
-time.sleep(5)
-
-#Find how to use text input instead of keydown and keyup
+time.sleep(2.5)
