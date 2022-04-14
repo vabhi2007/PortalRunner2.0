@@ -1,6 +1,6 @@
 import math
-import random
 import time
+
 import pygame
 
 clock = pygame.time.Clock()
@@ -57,19 +57,26 @@ RedPortal = []
 BluePortal = []
 TotalDistance = 0
 
+
 class Platform:
     width = platform.get_width()
     height = platform.get_height()
     color = black
+
+
 class VerticalSpikes:
     width = VerticalSpike.get_width()
     height = VerticalSpike.get_height()
+
+
 class GroundEnemy:
     width = RightGround.get_width()
     height = RightGround.get_height()
+
+
 def MakePlatform(x, y):
     Display.blit(platform, (x, y))
-    PossibleMovementCoords.append((x,y))
+    PossibleMovementCoords.append((x, y))
 
 
 def LoadLevel(level):
@@ -97,74 +104,83 @@ centerX = 350
 centerY = 250
 
 AdjustDistance = 0
+
+
 def teleport(Portal, PlusOrMinus):
     global Adjusted, CharacterX, CharacterY, AdjustDistance, TotalDistance
     OldCharacterX = CharacterX
     OldCharacterY = CharacterY
-    TelePortAddOn = 29
+    TelePortAddOn = 14
     if PlusOrMinus == '+':
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0]+TelePortAddOn
+            CharacterX = RedPortal[0][1][0] + TelePortAddOn
             CharacterY = RedPortal[0][1][1]
 
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]+TelePortAddOn
+            CharacterX = BluePortal[0][1][0] + TelePortAddOn
             CharacterY = BluePortal[0][1][1]
     else:
         if Portal == 'Red':
             Adjusted = 0
-            CharacterX = RedPortal[0][1][0]-TelePortAddOn
+            CharacterX = RedPortal[0][1][0] - TelePortAddOn
             CharacterY = RedPortal[0][1][1]
         else:
             Adjusted = 0
-            CharacterX = BluePortal[0][1][0]-TelePortAddOn
+            CharacterX = BluePortal[0][1][0] - TelePortAddOn
             CharacterY = BluePortal[0][1][1]
     NewCharacterX = CharacterX
     NewCharacterY = CharacterY
-    AdjustDistance = NewCharacterX-OldCharacterX
+    AdjustDistance = NewCharacterX - OldCharacterX
     TotalDistance += AdjustDistance
 
-def adjust (distance):
+
+def adjust(distance):
     global CharacterX, centerX, RedPortal, BluePortal
     CharacterX += distance
     centerX += distance
-    if len(RedPortal)>0:
+    if len(RedPortal) > 0:
         RedPortal[0][1][0] += distance
-    if len(BluePortal)>0:
+    if len(BluePortal) > 0:
         BluePortal[0][1][0] += distance
-PossibleDeathCoord = [] #Contains x,y,width of object
+
+
+PossibleDeathCoord = []  # Contains x,y,width of object
 GroundDirection = 'Right'
 MovingGroundEnemyLocation = 75
-def makeMovingEnemy (x,y):
+
+
+def makeMovingEnemy(x, y):
     global GroundDirection, MovingGroundEnemyLocation
-    EnemyMoveSpeed = 0.5
-    if GroundDirection =='Right':
+    EnemyMoveSpeed = 0.2
+    if GroundDirection == 'Right':
         if MovingGroundEnemyLocation < 120:
-            MovingGroundEnemyLocation+=EnemyMoveSpeed
+            MovingGroundEnemyLocation += EnemyMoveSpeed
         else:
             GroundDirection = 'Left'
-            MovingGroundEnemyLocation-=EnemyMoveSpeed
-    elif GroundDirection =='Left':
+            MovingGroundEnemyLocation -= EnemyMoveSpeed
+    elif GroundDirection == 'Left':
         if MovingGroundEnemyLocation > 0:
-            MovingGroundEnemyLocation-=EnemyMoveSpeed
+            MovingGroundEnemyLocation -= EnemyMoveSpeed
         else:
             GroundDirection = 'Right'
-            MovingGroundEnemyLocation+=EnemyMoveSpeed
+            MovingGroundEnemyLocation += EnemyMoveSpeed
     MovingX = MovingGroundEnemyLocation + x
     MovingY = y - GroundEnemy.height
-    PossibleDeathCoord.append((MovingX,MovingY,28))
+    PossibleDeathCoord.append((MovingX, MovingY, 28))
     if GroundDirection == 'Right':
         Display.blit(RightGround, (MovingX, MovingY))
     elif GroundDirection == 'Left':
-        Display.blit(LeftGround,(MovingX,MovingY))
+        Display.blit(LeftGround, (MovingX, MovingY))
 
-def makeEnemy(x,y, SpikeLocation):
+
+def makeEnemy(x, y, SpikeLocation):
     SpikeX = x + SpikeLocation
     SpikeY = y - VerticalSpikes.height
-    Display.blit(VerticalSpike,(SpikeX, SpikeY))
-    PossibleDeathCoord.append((SpikeX,SpikeY,28))
+    Display.blit(VerticalSpike, (SpikeX, SpikeY))
+    PossibleDeathCoord.append((SpikeX, SpikeY, 28))
+
 
 def checkDeath():
     global PossibleDeathCoord, CharacterX, CharacterY, CharacterDirection
@@ -176,6 +192,8 @@ def checkDeath():
         if CharacterY + 50 >= DeathY and CharacterY - 50 <= DeathY:
             if CharacterX + VerticalSpikes.width >= DeathX and CharacterX + VerticalSpikes.width <= DeathX + DeathWidth or CharacterX >= DeathX and CharacterX <= DeathX + VerticalSpikes.width:
                 dead()
+
+
 def Level1():
     global centerX, centerY, PossibleMovementCoords, seconds
     PossibleMovementCoords.clear()
@@ -188,7 +206,7 @@ def Level1():
     MakePlatform(centerX + 1050, centerY + 150)
     makeMovingEnemy(centerX + 1050, centerY + 150)
     MakePlatform(centerX + 1400, centerY - 175)
-    makeEnemy(centerX + 1400, centerY - 175)
+    makeEnemy(centerX + 1400, centerY - 175, 90)
     MakePlatform(centerX + 1850, centerY + 50)
     makeMovingEnemy(centerX + 1850, centerY + 50)
     MakePlatform(centerX + 2450, centerY)
@@ -197,7 +215,6 @@ def Level1():
     # if seconds<=5:
     #     MakePlatform(centerX+300,centerY+50)
     #     PossibleMovementCoords.append((centerX + 300, centerY + 50))
-
 
 
 def dead():
@@ -210,6 +227,7 @@ def dead():
 
 Adjusted = 0
 
+
 def checkIfOffPlatform():
     global PossibleMovementCoords, CharacterX, CharacterY, centerX
     for coord in PossibleMovementCoords:
@@ -217,19 +235,23 @@ def checkIfOffPlatform():
         CoordY = coord[1]
         if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
             if CharacterX >= CoordX - 40 and CharacterX <= CoordX + Platform.width + 40:
-                Limit = Platform.width+CoordX
+                Limit = Platform.width + CoordX
                 Min = CoordX
-                if CharacterX  > Limit:
+                if CharacterX > Limit:
                     CharacterX = Limit - 29
                     adjust(29)
-                elif CharacterX  < Min:
+                elif CharacterX < Min:
                     CharacterX = Min
+
+
 type = ''
+
+
 def checkKey():
     global type, centerX, centerY, CharacterDirection, PossibleMovementCoords, CharacterX, CharacterY, variation, RedPortal, BluePortal, Adjusted, StartIndex, EscapeIndex, totalMove, AdjustDistance, TotalDistance
-    #Getting events when they happen
+    # Getting events when they happen
     for event in pygame.event.get():
-        #Quit if player exits
+        # Quit if player exits
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
@@ -250,19 +272,19 @@ def checkKey():
                 if CharacterY + 85 >= CoordY and CoordY - 30 >= CharacterY:
                     # If and elif for moving player if it's possible
                     if CharacterX - 10 >= CoordX and CharacterX + 30 <= CoordX + Platform.width:
-                        if event.key == pygame.K_LEFT or event.key == pygame.K_a :
+                        if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                             type = "NormalLeft"
                             break
                         elif event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                             type = 'NormalRight'
                             break
                     # Following two elif statements are exceptions for movement when player is at the edge of a platform
-                    elif CharacterX - 10 >= CoordX and CharacterX  <= CoordX + Platform.width+15:
+                    elif CharacterX - 10 >= CoordX and CharacterX <= CoordX + Platform.width + 15:
 
                         if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                             type = 'EdgeLeft'
                             break
-                    elif CharacterX + 30 <= CoordX + Platform.width and CharacterX >= CoordX-15:
+                    elif CharacterX + 30 <= CoordX + Platform.width and CharacterX >= CoordX - 15:
                         if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                             type = 'EdgeRight'
                             break
@@ -275,6 +297,7 @@ def checkKey():
                 variation = 'default'
         elif event.type == pygame.MOUSEBUTTONDOWN:
             addPortal()
+
 
 def move(type):
     global centerX, TotalDistance, RedPortal, CharacterDirection, PossibleMovementCoords, AdjustDistance
@@ -341,6 +364,8 @@ def move(type):
     # Code for auto adjust
     adjust(-1 * AdjustDistance)
     AdjustDistance = 0
+
+
 def addPortal():
     global variation, RedPortal, BluePortal, PossibleMovementCoords
     if variation == 'red':
@@ -349,16 +374,16 @@ def addPortal():
             PlatformX = coord[0]
             PlatformY = coord[1]
             MouseX = pygame.mouse.get_pos()[0]
-            if MouseX >= PlatformX+2 and MouseX <= PlatformX + Platform.width-7:
-                RedPortal.append((redPortal, list((MouseX-7, PlatformY - 50))))
+            if MouseX >= PlatformX + 2 and MouseX <= PlatformX + Platform.width - 7:
+                RedPortal.append((redPortal, list((MouseX - 7, PlatformY - 50))))
     elif variation == 'blue':
         BluePortal.clear()
         for coord in PossibleMovementCoords:
             PlatformX = coord[0]
             PlatformY = coord[1]
             MouseX = pygame.mouse.get_pos()[0]
-            if MouseX >= PlatformX+2 and MouseX <= PlatformX + Platform.width-7:
-                BluePortal.append((bluePortal, list((MouseX-7, PlatformY - 50))))
+            if MouseX >= PlatformX + 2 and MouseX <= PlatformX + Platform.width - 7:
+                BluePortal.append((bluePortal, list((MouseX - 7, PlatformY - 50))))
 
 
 def makePortal():
@@ -382,7 +407,7 @@ def makeCursor():
 font = pygame.font.Font('Fonts/CollegiateBlackFLF.ttf', 52)
 while Win == False:
     clock.tick(clockTick)
-    seconds+=0.00833333333
+    seconds += 0.00833333333
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
 
