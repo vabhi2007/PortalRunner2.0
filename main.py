@@ -165,12 +165,8 @@ def checkDeath():
         DeathWidth = Coords[2]
 
         if CharacterY + 50 >= DeathY and CharacterY - 50 <= DeathY:
-            if CharacterDirection == 'right':
-                if CharacterX + VerticalSpikes.width >= DeathX and CharacterX + VerticalSpikes.width <= DeathX + DeathWidth:
-                    dead()
-            elif CharacterDirection == 'left':
-                if CharacterX >= DeathX and CharacterX <= DeathX + VerticalSpikes.width:
-                    dead()
+            if CharacterX + VerticalSpikes.width >= DeathX and CharacterX + VerticalSpikes.width <= DeathX + DeathWidth or CharacterX >= DeathX and CharacterX <= DeathX + VerticalSpikes.width:
+                dead()
 def Level1():
     global centerX, centerY, PossibleMovementCoords, seconds
     PossibleMovementCoords.clear()
