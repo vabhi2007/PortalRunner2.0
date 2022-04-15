@@ -4,7 +4,8 @@ import time
 import pygame
 
 clock = pygame.time.Clock()
-clockTick = 120
+clockTick = 60
+FrameCounter = 1
 seconds = 0
 
 pygame.init()
@@ -403,11 +404,10 @@ def makeCursor():
     else:
         Display.blit(defaultCursor, pygame.mouse.get_pos())
 
-
 font = pygame.font.Font('Fonts/CollegiateBlackFLF.ttf', 52)
 while Win == False:
     clock.tick(clockTick)
-    seconds += 0.00833333333
+    seconds += 1/clockTick
     text = font.render(str(math.floor(seconds)), True, black)
     Display.blit(text, (650, 50))
 
@@ -430,6 +430,10 @@ while Win == False:
         Display.blit(background, (0, 0))
     if TotalDistance >= 2820:
         break
+    if FrameCounter > 60:
+        FrameCounter = 1
+    else:
+        FrameCounter+=1
 
 Seconds = str(math.floor(seconds))
 CurrentTime = font.render("Seconds: " + Seconds, True, black)
