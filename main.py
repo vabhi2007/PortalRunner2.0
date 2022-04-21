@@ -156,7 +156,7 @@ def makeMovingEnemy(x, y):
     global GroundDirection, MovingGroundEnemyLocation
     EnemyMoveSpeed = 0.2
     if GroundDirection == 'Right':
-        if MovingGroundEnemyLocation < 120:
+        if MovingGroundEnemyLocation < Platform.width-GroundEnemy.width:
             MovingGroundEnemyLocation += EnemyMoveSpeed
         else:
             GroundDirection = 'Left'
